@@ -32,7 +32,7 @@ public class wifiNetworks extends AppCompatActivity {
 
         manager = (WifiManager) getApplicationContext().getSystemService(WIFI_SERVICE);
         List<WifiConfiguration> networks = manager.getConfiguredNetworks();
-        
+
         //handlePermission();
 
         /*BroadcastReceiver mWifiScanReceiver = new BroadcastReceiver() {
