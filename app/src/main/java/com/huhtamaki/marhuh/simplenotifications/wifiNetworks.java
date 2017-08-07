@@ -17,13 +17,17 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.widget.ListAdapter;
+import android.widget.ListView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class wifiNetworks extends AppCompatActivity {
 
     WifiManager manager;
     private int PERMISSION_CHANGE_WIFI_STATE;
+    ArrayList<String> SSIDs;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,6 +36,14 @@ public class wifiNetworks extends AppCompatActivity {
 
         manager = (WifiManager) getApplicationContext().getSystemService(WIFI_SERVICE);
         List<WifiConfiguration> networks = manager.getConfiguredNetworks();
+        SSIDs = new ArrayList<>();
+        for(WifiConfiguration network : networks){
+            SSIDs.add(network.SSID);
+        }
+
+        ListAdapter myAdapter = new CustomAdapter(this,SSIDs);
+        ListView listView = (ListView) findViewById(R.id.listView);
+        listView.setAdapter(myAdapter);
 
         //handlePermission();
 
