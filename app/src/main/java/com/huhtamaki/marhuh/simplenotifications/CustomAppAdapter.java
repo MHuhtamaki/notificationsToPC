@@ -20,7 +20,7 @@ import java.util.List;
  * Created by marhuh on 8.8.2017.
  */
 
-public class CustomAppAdapter extends ArrayAdapter {
+public class CustomAppAdapter extends ArrayAdapter<Application> {
 
     public CustomAppAdapter(@NonNull Context context, ArrayList<Application> appList) {
         super(context,R.layout.app_custom_row ,appList);
@@ -34,6 +34,7 @@ public class CustomAppAdapter extends ArrayAdapter {
 
         Application app = (Application) getItem(position);
         String app_name = app.getName();
+        System.out.println(app_name);
         int app_icon = app.getIcon();
 
         TextView row_text = customView.findViewById(R.id.app_name);
