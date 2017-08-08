@@ -1,14 +1,8 @@
 package com.huhtamaki.marhuh.simplenotifications;
 
 import android.Manifest;
-import android.app.Activity;
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.pm.PackageManager;
-import android.net.wifi.ScanResult;
 import android.net.wifi.WifiConfiguration;
 import android.net.wifi.WifiManager;
 import android.os.Build;
@@ -25,7 +19,7 @@ import android.widget.ListView;
 import java.util.ArrayList;
 import java.util.List;
 
-public class wifiNetworks extends AppCompatActivity {
+public class WifiActivity extends AppCompatActivity {
 
     WifiManager manager;
     private int PERMISSION_CHANGE_WIFI_STATE;
@@ -91,7 +85,7 @@ public class wifiNetworks extends AppCompatActivity {
                             .setMessage("Permission to access wifi needed! Grant permission now?")
                             .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int which) {
-                                    ActivityCompat.requestPermissions(wifiNetworks.this, new String[]{Manifest.permission.CHANGE_WIFI_STATE},
+                                    ActivityCompat.requestPermissions(WifiActivity.this, new String[]{Manifest.permission.CHANGE_WIFI_STATE},
                                             PERMISSION_CHANGE_WIFI_STATE);
                                 }
                             })

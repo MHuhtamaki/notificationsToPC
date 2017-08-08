@@ -4,5 +4,5 @@
     <color name="colorPrimaryDark">#000000</color>
     <color name="colorAccent">#FF4081</color>
     <color name="navigation_menu_item">#FFFEAE0D</color>
-    <color name="activity_main_bg">#263238</color>
+    <color name="activity_background">#263238</color>
 </resources>

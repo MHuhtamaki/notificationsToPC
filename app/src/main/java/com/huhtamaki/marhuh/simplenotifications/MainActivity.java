@@ -9,8 +9,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
 
@@ -53,8 +51,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         switch (item.getItemId()){
             case R.id.networks:
                 //Toast.makeText(this, "This is a test", Toast.LENGTH_SHORT);
-                Intent intent = new Intent(this, wifiNetworks.class);
+                Intent intent = new Intent(this, WifiActivity.class);
                 startActivity(intent);
+                break;
+            case R.id.home:
+                Intent home = new Intent(this, MainActivity.class);
+                startActivity(home);
+                break;
+            case R.id.apps:
+                Intent apps = new Intent(this, AppsActivity.class);
+                startActivity(apps);
+                break;
         }
         return true;
     }
