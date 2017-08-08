@@ -6,6 +6,7 @@ import android.content.pm.ResolveInfo;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.ArrayAdapter;
+import android.widget.ListAdapter;
 import android.widget.ListView;
 
 import java.util.ArrayList;
@@ -29,7 +30,7 @@ public class AppsActivity extends AppCompatActivity {
         for(ResolveInfo info : pkgAppsList){
             Application app = new Application();
             app.setName(info.activityInfo.applicationInfo.loadLabel(pkManager).toString());
-            app.setIcon(info.activityInfo.applicationInfo.icon);
+            app.setIcon(info.activityInfo.applicationInfo.loadIcon(pkManager));
             allapps.add(app);
         }
 
@@ -37,13 +38,13 @@ public class AppsActivity extends AppCompatActivity {
             allapps_string.add(ap.getName());
         }
 
-        ListView listView = (ListView) findViewById(R.id.apps_listview);
+        /*ListView listView = (ListView) findViewById(R.id.apps_listview);
         listView.setAdapter(new ArrayAdapter(this,
-                android.R.layout.simple_list_item_1, allapps_string));
+                android.R.layout.simple_list_item_1, allapps_string));*/
 
-        /*ListAdapter myAdapter = new CustomAppAdapter(this,allapps);
+        ListAdapter myAdapter = new CustomAppAdapter(this,allapps);
         ListView listView = (ListView) findViewById(R.id.apps_listview);
-        listView.setAdapter(myAdapter);*/
+        listView.setAdapter(myAdapter);
     }
 
 }

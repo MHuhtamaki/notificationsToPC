@@ -9,7 +9,7 @@ import android.graphics.drawable.Drawable;
 public class Application {
 
     private String name = "";
-    private int icon;
+    private Drawable icon;
 
     public String getName() {
         return name;
@@ -19,11 +19,11 @@ public class Application {
         this.name = name;
     }
 
-    public int getIcon() {
+    public Drawable getIcon() {
         return icon;
     }
 
-    public void setIcon(int icon) {
+    public void setIcon(Drawable icon) {
         this.icon = icon;
     }
 }
