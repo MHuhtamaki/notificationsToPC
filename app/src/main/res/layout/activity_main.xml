@@ -24,6 +24,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:text="Main layout"
+            android:textColor="@color/navigation_menu_item"
             android:textAlignment="center"
             android:textSize="24dp" />
     </LinearLayout>

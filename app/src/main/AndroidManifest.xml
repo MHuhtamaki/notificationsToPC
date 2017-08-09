@@ -20,7 +20,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".WifiActivity" />
-        <activity android:name=".AppsActivity"></activity>
+        <activity android:name=".AppsActivity" />
     </application>
 
 </manifest>

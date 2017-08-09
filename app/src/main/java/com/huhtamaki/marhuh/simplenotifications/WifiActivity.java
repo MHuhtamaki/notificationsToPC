@@ -3,6 +3,7 @@ package com.huhtamaki.marhuh.simplenotifications;
 import android.Manifest;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.wifi.WifiConfiguration;
 import android.net.wifi.WifiManager;
@@ -12,9 +13,11 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.InputType;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -27,11 +30,15 @@ public class WifiActivity extends AppCompatActivity {
     private WifiManager manager;
     private ArrayList<String> SSIDs;
     private int PERMISSION_CHANGE_WIFI_STATE = 0;
+    private AlertDialog.Builder builder;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_wifi_networks);
+
+        // Creation of a dialog builder for prompting the IP address from the user.
+        createDialogBuilder();
 
         manager = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
         manager.setWifiEnabled(true);
@@ -52,13 +59,14 @@ public class WifiActivity extends AppCompatActivity {
             listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                // TODO: Implement code for wifi network click.
-                // TODO: Open a list of devices in that network or something...
+                // Ask user to input an IP address
+                AlertDialog ad = builder.create();
+                ad.show();
             }
             });
         }
         else{
-            Toast.makeText(this, "No networks", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Failed to find configured networks, try again", Toast.LENGTH_SHORT).show();
         }
 
         //handlePermission();
@@ -75,6 +83,31 @@ public class WifiActivity extends AppCompatActivity {
         registerReceiver(mWifiScanReceiver, new IntentFilter(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION));
         manager.startScan();*/
 
+    }
+
+    private void createDialogBuilder() {
+
+        builder = new AlertDialog.Builder(this);
+        EditText input = new EditText(WifiActivity.this);
+        input.setRawInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
+        builder.setTitle("IP Address");
+        builder.setMessage("Please, specify an IP address where to send notifications.");
+        builder.setView(input);
+
+        builder.setPositiveButton("Save", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int which) {
+                //TODO: Handle storing the IP address.
+                Toast.makeText(WifiActivity.this, "Target IP address stored!", Toast.LENGTH_SHORT);
+            }
+        });
+
+        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                dialogInterface.dismiss();
+            }
+        });
     }
 
     private void handlePermission() {
