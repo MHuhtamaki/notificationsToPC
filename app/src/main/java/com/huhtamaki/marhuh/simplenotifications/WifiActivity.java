@@ -24,41 +24,42 @@ import java.util.List;
 
 public class WifiActivity extends AppCompatActivity {
 
+    private WifiManager manager;
+    private ArrayList<String> SSIDs;
+    private int PERMISSION_CHANGE_WIFI_STATE = 0;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_wifi_networks);
 
-        WifiManager manager = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
+        manager = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
+        manager.setWifiEnabled(true);
         List<WifiConfiguration> networks = manager.getConfiguredNetworks();
 
-        List<String> SSIDs = new ArrayList<>();
+        SSIDs = new ArrayList<>();
         if(networks != null){
             for(WifiConfiguration network : networks){
-                SSIDs.add(network.SSID);
+                String id = network.SSID;
+                id = id.replace("\"","");
+                SSIDs.add(id);
             }
 
-            ListAdapter myAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, SSIDs);
+            ListAdapter myListAdapter = new CustomAdapter(this,SSIDs);
             ListView listView = (ListView) findViewById(R.id.listview_networks);
-            listView.setAdapter(myAdapter);
-        }
-        else{
-            Toast.makeText(this, "No networks", Toast.LENGTH_SHORT).show();
-        }
+            listView.setAdapter(myListAdapter);
 
-
-
-        /*ListAdapter myListAdapter = new CustomAdapter(this,SSIDs);
-        ListView listView = (ListView) findViewById(R.id.listview_networks);
-        listView.setAdapter(myListAdapter);
-
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 // TODO: Implement code for wifi network click.
                 // TODO: Open a list of devices in that network or something...
             }
-        });*/
+            });
+        }
+        else{
+            Toast.makeText(this, "No networks", Toast.LENGTH_SHORT).show();
+        }
 
         //handlePermission();
 
@@ -76,7 +77,7 @@ public class WifiActivity extends AppCompatActivity {
 
     }
 
-    /*private void handlePermission() {
+    private void handlePermission() {
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
 
@@ -121,5 +122,5 @@ public class WifiActivity extends AppCompatActivity {
             }
         }
 
-    }*/
+    }
 }
