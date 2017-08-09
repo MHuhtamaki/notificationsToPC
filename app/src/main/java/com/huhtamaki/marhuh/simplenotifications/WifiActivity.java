@@ -4,6 +4,7 @@ import android.Manifest;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.net.wifi.WifiConfiguration;
 import android.net.wifi.WifiManager;
@@ -20,6 +21,7 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -31,14 +33,18 @@ public class WifiActivity extends AppCompatActivity {
     private ArrayList<String> SSIDs;
     private int PERMISSION_CHANGE_WIFI_STATE = 0;
     private AlertDialog.Builder builder;
+    private AlertDialog ad;
+    private String current_target_ip_address;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_wifi_networks);
 
-        // Creation of a dialog builder for prompting the IP address from the user.
+        // Creation of a DialogBuilder for prompting the IP address from the user.
         createDialogBuilder();
+        // Creation of a dialog.
+        ad = builder.create();
 
         manager = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
         manager.setWifiEnabled(true);
@@ -59,9 +65,15 @@ public class WifiActivity extends AppCompatActivity {
             listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                // Ask user to input an IP address
-                AlertDialog ad = builder.create();
+
+                // Get the name of a clicked wifi network.
+                TextView current = (TextView) view.findViewById(R.id.app_name);
+                String SSID = current.getText().toString();
+
+                // Ask user to input an IP address.
                 ad.show();
+                // Store the ip with a current wifi SSID
+                storeTargetIP(SSID);
             }
             });
         }
@@ -88,7 +100,7 @@ public class WifiActivity extends AppCompatActivity {
     private void createDialogBuilder() {
 
         builder = new AlertDialog.Builder(this);
-        EditText input = new EditText(WifiActivity.this);
+        final EditText input = new EditText(WifiActivity.this);
         input.setRawInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
         builder.setTitle("IP Address");
         builder.setMessage("Please, specify an IP address where to send notifications.");
@@ -97,8 +109,16 @@ public class WifiActivity extends AppCompatActivity {
         builder.setPositiveButton("Save", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int which) {
-                //TODO: Handle storing the IP address.
-                Toast.makeText(WifiActivity.this, "Target IP address stored!", Toast.LENGTH_SHORT);
+                // Get entered Ip address and check it for unwanted characters.
+                String ip = input.getText().toString();
+                String[] bad_strings = {" ",",","-"};
+                for(String s : bad_strings){
+                    if(ip.contains(s)){
+                        ip = ip.replace(s,"");
+                    }
+                }
+                // Store given IP address for sending notifications.
+                current_target_ip_address = ip;
             }
         });
 
@@ -108,6 +128,12 @@ public class WifiActivity extends AppCompatActivity {
                 dialogInterface.dismiss();
             }
         });
+    }
+
+    private void storeTargetIP(String SSID) {
+        //TODO: Handle storing the IP address.
+        SharedPreferences pref = getSharedPreferences("networkInfo", Context.MODE_PRIVATE);
+        Toast.makeText(this, "Target IP address stored!", Toast.LENGTH_SHORT).show();
     }
 
     private void handlePermission() {
