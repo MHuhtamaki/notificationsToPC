@@ -9,12 +9,18 @@ import android.content.pm.PackageManager;
 import android.net.wifi.WifiConfiguration;
 import android.net.wifi.WifiManager;
 import android.os.Build;
+import android.support.annotation.NonNull;
+import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.text.InputType;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -27,19 +33,35 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.List;
 
-public class WifiActivity extends AppCompatActivity {
+public class WifiActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
 
     private WifiManager manager;
     private ArrayList<String> SSIDs;
-    private int PERMISSION_CHANGE_WIFI_STATE = 0;
     private AlertDialog.Builder builder;
     private AlertDialog ad;
-    private String current_target_ip_address;
+    private String current_target_SSID;
+
+    private DrawerLayout drawerLayout;
+    private ActionBarDrawerToggle toggle;
+    private Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_wifi_networks);
+
+        // Navigation bar, toggle and drawer.
+        toolbar = (Toolbar) findViewById(R.id.nav_action);
+        setSupportActionBar(toolbar);
+        drawerLayout = (DrawerLayout) findViewById(R.id.drawerLayout);
+        toggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.open, R.string.close);
+        drawerLayout.addDrawerListener(toggle);
+        toggle.syncState();
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        setNavigationViewListener();
+
+
 
         // Creation of a DialogBuilder for prompting the IP address from the user.
         createDialogBuilder();
@@ -67,34 +89,17 @@ public class WifiActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
 
                 // Get the name of a clicked wifi network.
-                TextView current = (TextView) view.findViewById(R.id.app_name);
-                String SSID = current.getText().toString();
+                TextView current = view.findViewById(R.id.row_text);
+                current_target_SSID = current.getText().toString();
 
                 // Ask user to input an IP address.
                 ad.show();
-                // Store the ip with a current wifi SSID
-                storeTargetIP(SSID);
             }
             });
         }
         else{
             Toast.makeText(this, "Failed to find configured networks, try again", Toast.LENGTH_SHORT).show();
         }
-
-        //handlePermission();
-
-        /*BroadcastReceiver mWifiScanReceiver = new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context c, Intent intent) {
-                if (intent.getAction().equals(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION)) {
-                    List<ScanResult> mScanResults = manager.getScanResults();
-                    // add your logic here
-                }
-            }
-        };
-        registerReceiver(mWifiScanReceiver, new IntentFilter(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION));
-        manager.startScan();*/
-
     }
 
     private void createDialogBuilder() {
@@ -118,7 +123,8 @@ public class WifiActivity extends AppCompatActivity {
                     }
                 }
                 // Store given IP address for sending notifications.
-                current_target_ip_address = ip;
+                // Store the ip with a current ip
+                storeTargetIP(ip);
             }
         });
 
@@ -130,56 +136,38 @@ public class WifiActivity extends AppCompatActivity {
         });
     }
 
-    private void storeTargetIP(String SSID) {
-        //TODO: Handle storing the IP address.
+    private void storeTargetIP(String ip) {
+
         SharedPreferences pref = getSharedPreferences("networkInfo", Context.MODE_PRIVATE);
-        Toast.makeText(this, "Target IP address stored!", Toast.LENGTH_SHORT).show();
+        SharedPreferences.Editor editor = pref.edit();
+        editor.putString(current_target_SSID,ip);
+        editor.apply();
+
+        Toast.makeText(this, "Target IP stored!", Toast.LENGTH_SHORT).show();
     }
 
-    private void handlePermission() {
+    private void setNavigationViewListener(){
+        NavigationView navigationView = (NavigationView) findViewById(R.id.myNavigationView);
+        navigationView.setNavigationItemSelectedListener(this);
+    }
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
-
-            PERMISSION_CHANGE_WIFI_STATE = ContextCompat.checkSelfPermission(this, Manifest.permission.CHANGE_WIFI_STATE);
-            if(PERMISSION_CHANGE_WIFI_STATE != PackageManager.PERMISSION_GRANTED){
-
-                // Info is show to the user if permission denied before and tried to use again.
-                if (ActivityCompat.shouldShowRequestPermissionRationale(this,
-                        Manifest.permission.CHANGE_WIFI_STATE)) {
-
-                    AlertDialog.Builder builder;
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                        builder = new AlertDialog.Builder(this, android.R.style.Theme_Material_Dialog_Alert);
-                    } else {
-                        builder = new AlertDialog.Builder(this);
-                    }
-                    builder.setTitle("Info")
-                            .setMessage("Permission to access wifi needed! Grant permission now?")
-                            .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int which) {
-                                    ActivityCompat.requestPermissions(WifiActivity.this, new String[]{Manifest.permission.CHANGE_WIFI_STATE},
-                                            PERMISSION_CHANGE_WIFI_STATE);
-                                }
-                            })
-                            .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int which) {
-                                    // do nothing
-                                }
-                            })
-                            .setIcon(android.R.drawable.ic_dialog_info)
-                            .show();
-
-                }
-                else {
-                    ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CHANGE_WIFI_STATE},
-                            PERMISSION_CHANGE_WIFI_STATE);
-                }
-            }
-            else{
-                // Turn on Wifi
-                manager.setWifiEnabled(true);
-            }
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.networks:
+                //Toast.makeText(this, "Wifi clicked", Toast.LENGTH_SHORT);
+                Intent intent = new Intent(this, WifiActivity.class);
+                startActivity(intent);
+                break;
+            case R.id.home:
+                Intent home = new Intent(this, MainActivity.class);
+                startActivity(home);
+                break;
+            case R.id.apps:
+                Intent apps = new Intent(this, AppsActivity.class);
+                startActivity(apps);
+                break;
         }
-
+        return true;
     }
 }
