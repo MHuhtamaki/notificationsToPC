@@ -9,6 +9,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
 
@@ -50,7 +51,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         switch (item.getItemId()){
             case R.id.networks:
-                //Toast.makeText(this, "This is a test", Toast.LENGTH_SHORT);
+                //Toast.makeText(this, "Wifi clicked", Toast.LENGTH_SHORT);
                 Intent intent = new Intent(this, WifiActivity.class);
                 startActivity(intent);
                 break;

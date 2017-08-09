@@ -1,6 +1,7 @@
 package com.huhtamaki.marhuh.simplenotifications;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.net.wifi.WifiConfiguration;
@@ -13,40 +14,51 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.ListAdapter;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class WifiActivity extends AppCompatActivity {
 
-    WifiManager manager;
-    private int PERMISSION_CHANGE_WIFI_STATE;
-    ArrayList<String> SSIDs;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_wifi_networks);
 
-        manager = (WifiManager) getApplicationContext().getSystemService(WIFI_SERVICE);
+        WifiManager manager = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
         List<WifiConfiguration> networks = manager.getConfiguredNetworks();
-        SSIDs = new ArrayList<>();
-        for(WifiConfiguration network : networks){
-            SSIDs.add(network.SSID);
+
+        List<String> SSIDs = new ArrayList<>();
+        if(networks != null){
+            for(WifiConfiguration network : networks){
+                SSIDs.add(network.SSID);
+            }
+
+            ListAdapter myAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, SSIDs);
+            ListView listView = (ListView) findViewById(R.id.listview_networks);
+            listView.setAdapter(myAdapter);
+        }
+        else{
+            Toast.makeText(this, "No networks", Toast.LENGTH_SHORT).show();
         }
 
-        ListAdapter myAdapter = new CustomAdapter(this,SSIDs);
-        ListView listView = (ListView) findViewById(R.id.listView);
-        listView.setAdapter(myAdapter);
+
+
+        /*ListAdapter myListAdapter = new CustomAdapter(this,SSIDs);
+        ListView listView = (ListView) findViewById(R.id.listview_networks);
+        listView.setAdapter(myListAdapter);
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                // TODO: Implement code for wifi network click
+                // TODO: Implement code for wifi network click.
+                // TODO: Open a list of devices in that network or something...
             }
-        });
+        });*/
 
         //handlePermission();
 
@@ -64,7 +76,7 @@ public class WifiActivity extends AppCompatActivity {
 
     }
 
-    private void handlePermission() {
+    /*private void handlePermission() {
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
 
@@ -109,5 +121,5 @@ public class WifiActivity extends AppCompatActivity {
             }
         }
 
-    }
+    }*/
 }
