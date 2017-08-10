@@ -7,25 +7,27 @@
 
     <ImageView
         android:id="@+id/iw_wifi"
-        android:layout_width="80dp"
-        android:layout_height="80dp"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
         android:layout_gravity="start"
         app:srcCompat="@drawable/wifi_icon_new"
         android:contentDescription="" />
 
     <TextView
         android:id="@+id/row_text"
-        android:layout_width="wrap_content"
+        android:layout_width="230dp"
         android:layout_height="wrap_content"
-        android:textStyle="bold"
         android:layout_gravity="center"
-        android:textColor="@color/navigation_menu_item"/>
+        android:text="Network name"
+        android:textColor="@color/navigation_menu_item"
+        android:textStyle="bold" />
 
-    <!--<Switch
+    <Switch
         android:id="@+id/wifi_switch"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="right|center"
-        android:paddingRight="5dp"/>-->
+        android:focusable="false"
+        android:paddingRight="5dp"/>
 
 </LinearLayout>

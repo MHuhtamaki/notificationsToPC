@@ -61,8 +61,6 @@ public class WifiActivity extends AppCompatActivity implements NavigationView.On
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         setNavigationViewListener();
 
-
-
         // Creation of a DialogBuilder for prompting the IP address from the user.
         createDialogBuilder();
         // Creation of a dialog.
@@ -123,7 +121,7 @@ public class WifiActivity extends AppCompatActivity implements NavigationView.On
                     }
                 }
                 // Store given IP address for sending notifications.
-                // Store the ip with a current ip
+                // Store the ip with a current SSID (SSID stored in listview onItemClickListener).
                 storeTargetIP(ip);
             }
         });
@@ -155,7 +153,6 @@ public class WifiActivity extends AppCompatActivity implements NavigationView.On
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()){
             case R.id.networks:
-                //Toast.makeText(this, "Wifi clicked", Toast.LENGTH_SHORT);
                 Intent intent = new Intent(this, WifiActivity.class);
                 startActivity(intent);
                 break;
@@ -167,6 +164,8 @@ public class WifiActivity extends AppCompatActivity implements NavigationView.On
                 Intent apps = new Intent(this, AppsActivity.class);
                 startActivity(apps);
                 break;
+            case R.id.settings:
+                // TODO: Implement settings activity.
         }
         return true;
     }
