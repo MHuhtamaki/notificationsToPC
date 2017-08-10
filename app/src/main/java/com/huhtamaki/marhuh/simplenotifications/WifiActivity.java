@@ -83,16 +83,16 @@ public class WifiActivity extends AppCompatActivity implements NavigationView.On
             listView.setAdapter(myListAdapter);
 
             listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                @Override
+                public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
 
-                // Get the name of a clicked wifi network.
-                TextView current = view.findViewById(R.id.row_text);
-                current_target_SSID = current.getText().toString();
+                    // Get the name of a clicked wifi network.
+                    TextView current = view.findViewById(R.id.row_text);
+                    current_target_SSID = current.getText().toString();
 
-                // Ask user to input an IP address.
-                ad.show();
-            }
+                    // Ask user to input an IP address.
+                    ad.show();
+                }
             });
         }
         else{
