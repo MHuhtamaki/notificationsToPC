@@ -51,7 +51,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         switch (item.getItemId()){
             case R.id.networks:
-                //Toast.makeText(this, "Wifi clicked", Toast.LENGTH_SHORT);
                 Intent intent = new Intent(this, WifiActivity.class);
                 startActivity(intent);
                 break;
