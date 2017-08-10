@@ -27,6 +27,7 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListAdapter;
 import android.widget.ListView;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -44,20 +45,22 @@ public class WifiActivity extends AppCompatActivity implements NavigationView.On
     private DrawerLayout drawerLayout;
     private ActionBarDrawerToggle toggle;
     private Toolbar toolbar;
+    private Switch network_switch;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_wifi_networks);
 
-        // Navigation bar, toggle and drawer.
-        toolbar = (Toolbar) findViewById(R.id.nav_action);
+        // Get references to different widgets.
+        getViewReferences();
+
+        // Set actionbar.
         setSupportActionBar(toolbar);
-        drawerLayout = (DrawerLayout) findViewById(R.id.drawerLayout);
+
         toggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.open, R.string.close);
         drawerLayout.addDrawerListener(toggle);
         toggle.syncState();
-
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         setNavigationViewListener();
 
@@ -98,6 +101,13 @@ public class WifiActivity extends AppCompatActivity implements NavigationView.On
         else{
             Toast.makeText(this, "Failed to find configured networks, try again", Toast.LENGTH_SHORT).show();
         }
+    }
+    private void getViewReferences() {
+
+        network_switch = (Switch) findViewById(R.id.wifi_switch);
+        toolbar = (Toolbar) findViewById(R.id.nav_action);
+        drawerLayout = (DrawerLayout) findViewById(R.id.drawerLayout);
+
     }
 
     private void createDialogBuilder() {
