@@ -60,13 +60,6 @@ public class WifiActivity extends AppCompatActivity implements NavigationView.On
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         setNavigationViewListener();
 
-        // Creation of a DialogBuilder for prompting the IP address from the user.
-        createDialogBuilder();
-        // Creation of a dialog.
-        ad = builder.create();
-
-        // Populate network listview with configured wifi networks.
-        // and create onClickListener to list items.
         populateNetworksToListview();
 
     }
@@ -88,68 +81,10 @@ public class WifiActivity extends AppCompatActivity implements NavigationView.On
             ListAdapter myListAdapter = new CustomAdapter(this,SSIDs);
             ListView listView = (ListView) findViewById(R.id.listview_networks);
             listView.setAdapter(myListAdapter);
-
-            listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                @Override
-                public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-
-                    // Get the name of a clicked wifi network.
-                    TextView current = view.findViewById(R.id.row_text);
-                    current_target_SSID = current.getText().toString();
-                    //Log.d("SSID",current_target_SSID);
-
-                    // Ask user to input an IP address.
-                    ad.show();
-                }
-            });
         }
         else{
             Toast.makeText(this, "Failed to find configured networks, try again", Toast.LENGTH_SHORT).show();
         }
-    }
-
-    private void createDialogBuilder() {
-
-        builder = new AlertDialog.Builder(this);
-        final EditText input = new EditText(WifiActivity.this);
-        input.setRawInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
-        builder.setTitle("IP Address");
-        builder.setMessage("Please, specify an IP address where to send notifications.");
-        builder.setView(input);
-
-        builder.setPositiveButton("Save", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int which) {
-                // Get entered Ip address and check it for unwanted characters.
-                String ip = input.getText().toString();
-                String[] bad_strings = {" ",",","-"};
-                for(String s : bad_strings){
-                    if(ip.contains(s)){
-                        ip = ip.replace(s,"");
-                    }
-                }
-                // Store given IP address for sending notifications.
-                // Store the ip with a current SSID (SSID stored in listview onItemClickListener).
-                storeTargetIP(ip);
-            }
-        });
-
-        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                dialogInterface.dismiss();
-            }
-        });
-    }
-
-    private void storeTargetIP(String ip) {
-
-        SharedPreferences pref = getSharedPreferences("networkInfo", Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = pref.edit();
-        editor.putString(current_target_SSID,ip);
-        editor.apply();
-
-        Toast.makeText(this, "Target IP stored!", Toast.LENGTH_SHORT).show();
     }
 
     private void setNavigationViewListener(){

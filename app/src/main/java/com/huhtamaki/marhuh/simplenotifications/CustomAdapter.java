@@ -2,15 +2,11 @@ package com.huhtamaki.marhuh.simplenotifications;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.media.Image;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
-import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.util.Log;
+import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,12 +15,8 @@ import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.Switch;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
-import java.util.Objects;
-
-import static android.content.Context.CONNECTIVITY_SERVICE;
 
 /**
  * Created by marhuh on 7.8.2017.
@@ -32,20 +24,26 @@ import static android.content.Context.CONNECTIVITY_SERVICE;
 
 class CustomAdapter extends ArrayAdapter<String>{
 
-    SharedPreferences prefs;
-    SharedPreferences.Editor editor;
+    private SharedPreferences prefs;
+    private SharedPreferences.Editor editor;
     Context context;
-    String connected_wifi_name;
+    private String connected_wifi_name;
+    private AlertDialog ad_IP;
+    private AlertDialog ad_wifi;
+    private AlertDialog.Builder builder;
+    private String current_target_SSID;
+    private ImageView listImage;
 
     public CustomAdapter(@NonNull Context context, ArrayList<String> networks) {
         super(context,R.layout.custom_row,networks);
-        prefs = context.getSharedPreferences("networkStates",context.MODE_PRIVATE);
-        editor = prefs.edit();
         this.context = context;
+        prefs = context.getSharedPreferences("networkStates",Context.MODE_PRIVATE);
+        editor = prefs.edit();
 
         WifiManager wifiMgr = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
         WifiInfo wifi_info = wifiMgr.getConnectionInfo();
         connected_wifi_name = wifi_info.getSSID();
+
     }
 
     @NonNull
@@ -55,9 +53,40 @@ class CustomAdapter extends ArrayAdapter<String>{
         View customView = inflater.inflate(R.layout.custom_row, parent, false);
 
         final String networkSSID = getItem(position);
+
         final TextView rowText = customView.findViewById(R.id.row_text);
-        ImageView listImage = customView.findViewById(R.id.iw_wifi);
         rowText.setText(networkSSID);
+        rowText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // Get the name of a clicked wifi network.
+                current_target_SSID = networkSSID;
+
+                // Creation of a DialogBuilder for prompting the IP address from the user.
+                CustomDialogBuilder myDialogBuilder = new CustomDialogBuilder(context, current_target_SSID);
+                builder = myDialogBuilder.createDialogBuilder("IP Address");
+
+                // Creation of a dialog.
+                ad_IP = builder.create();
+                ad_IP.show();
+            }
+        });
+
+        listImage = customView.findViewById(R.id.iw_wifi);
+        listImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //Toast.makeText(context, "It's me, wifi-icon :)", Toast.LENGTH_SHORT).show();
+
+                // Creation of a DialogBuilder for connecting to a wifi network.
+                CustomDialogBuilder myDialogBuilder = new CustomDialogBuilder(context);
+                builder = myDialogBuilder.createDialogBuilder("Connect to a wifi-network");
+
+                ad_wifi = builder.create();
+                ad_wifi.show();
+            }
+        });
+
 
         Switch mySwitch = customView.findViewById(R.id.wifi_switch);
         boolean value = prefs.getBoolean(networkSSID,false);
@@ -80,4 +109,6 @@ class CustomAdapter extends ArrayAdapter<String>{
 
         return customView;
     }
+
+
 }
