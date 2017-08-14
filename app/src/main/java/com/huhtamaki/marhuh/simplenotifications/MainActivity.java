@@ -1,6 +1,9 @@
 package com.huhtamaki.marhuh.simplenotifications;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.widget.DrawerLayout;
@@ -35,6 +38,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         setNavigationViewListener();
+
+        // Creation of broadcastreceiver
+        BroadcastReceiver myReceiver = new MyNotificationReceiver();
+        IntentFilter filter = new IntentFilter(Context.NOTIFICATION_SERVICE);
+        filter.addCategory(NOTIFICATION_SERVICE);
     }
 
     @Override
