@@ -27,7 +27,7 @@ class CustomAdapter extends ArrayAdapter<String>{
 
     private SharedPreferences prefs;
     private SharedPreferences.Editor editor;
-    Context context;
+    private Context context;
     private String connected_wifi_name;
     private AlertDialog ad_IP;
     private AlertDialog ad_wifi;
