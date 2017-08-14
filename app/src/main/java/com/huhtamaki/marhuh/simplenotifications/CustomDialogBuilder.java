@@ -18,10 +18,6 @@ public class CustomDialogBuilder {
     private Context context;
     private String current_target_SSID;
 
-    public CustomDialogBuilder(Context context){
-        this.context = context;
-    }
-
     public CustomDialogBuilder(Context context, String current_target_SSID){
         this.context = context;
         this.current_target_SSID = current_target_SSID;
@@ -49,6 +45,7 @@ public class CustomDialogBuilder {
                             ip = ip.replace(s,"");
                         }
                     }
+                    //Toast.makeText(context, current_target_SSID +  ":" + ip, Toast.LENGTH_SHORT).show();
                     // Store given IP address for sending notifications.
                     storeTargetIP(ip);
                 }
@@ -68,6 +65,11 @@ public class CustomDialogBuilder {
                 @Override
                 public void onClick(DialogInterface dialogInterface, int i) {
                     Toast.makeText(context, "Clicked Yes", Toast.LENGTH_SHORT).show();
+
+                    /*// Connect to the wifi-network.
+                    ConnectToWifi connector = new ConnectToWifi(context, current_target_SSID);
+                    connector.connect();*/
+
                     //listImage.setImageResource(R.drawable.wifi_icon_new);
                 }
             });

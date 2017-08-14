@@ -15,6 +15,7 @@ import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -76,11 +77,14 @@ class CustomAdapter extends ArrayAdapter<String>{
         listImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //Toast.makeText(context, "It's me, wifi-icon :)", Toast.LENGTH_SHORT).show();
+                // Get the name of a clicked wifi network.
+                current_target_SSID = networkSSID;
 
                 // Creation of a DialogBuilder for connecting to a wifi network.
-                CustomDialogBuilder myDialogBuilder = new CustomDialogBuilder(context);
+                CustomDialogBuilder myDialogBuilder = new CustomDialogBuilder(context, current_target_SSID);
                 builder = myDialogBuilder.createDialogBuilder("Connect to a wifi-network");
+                //TODO: Vie dialogbuilderille jollain tieto minkä rivin ikonia painettiin,
+                // TODO: kuvakkeen vaihtoa varten.
 
                 ad_wifi = builder.create();
                 ad_wifi.show();
