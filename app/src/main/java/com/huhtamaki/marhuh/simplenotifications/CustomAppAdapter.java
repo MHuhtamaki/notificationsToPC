@@ -40,6 +40,7 @@ public class CustomAppAdapter extends ArrayAdapter<Application> {
 
         Application app = getItem(position);
         final String app_name = app.getName();
+        final String app_packageName = app.getPackageName();
         Drawable app_icon = app.getIcon();
 
         TextView row_text = customView.findViewById(R.id.app_name);
@@ -48,14 +49,14 @@ public class CustomAppAdapter extends ArrayAdapter<Application> {
         row_image.setImageDrawable(app_icon);
 
         Switch mySwitch = customView.findViewById(R.id.app_switch);
-        boolean value = prefs.getBoolean(app_name,false);
+        boolean value = prefs.getBoolean(app_packageName,false);
         mySwitch.setChecked(value);
 
 
         mySwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean state) {
-                editor.putBoolean(app_name,state);
+                editor.putBoolean(app_packageName,state);
                 editor.apply();
             }
         });

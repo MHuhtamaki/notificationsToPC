@@ -1,6 +1,8 @@
 package com.huhtamaki.marhuh.simplenotifications;
 
+import android.app.Notification;
 import android.content.Context;
+import android.os.Bundle;
 import android.service.notification.StatusBarNotification;
 import android.widget.Toast;
 
@@ -10,17 +12,16 @@ import android.widget.Toast;
 
 public class TransferNotification {
 
-    StatusBarNotification sbn;
-    Context context;
+    private String title;
+    private String text_content;
+    private Context context;
 
-    public TransferNotification(Context context, StatusBarNotification sbn){
-        this.sbn = sbn;
+    public TransferNotification(Context context,String title, String text_content){
+        this.title = title;
+        this.text_content = text_content;
         this.context = context;
     }
 
     public void transfer(){
-
-        String notification = sbn.toString();
-        Toast.makeText(context, notification, Toast.LENGTH_LONG).show();
     }
 }

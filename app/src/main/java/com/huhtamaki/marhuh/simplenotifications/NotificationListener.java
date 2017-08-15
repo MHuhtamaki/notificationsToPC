@@ -24,16 +24,20 @@ public class NotificationListener extends NotificationListenerService {
 
     @Override
     public void onNotificationPosted(StatusBarNotification sbn){
-        //checkApplication(sbn);
-        //Toast.makeText(this, sbn.toString(), Toast.LENGTH_LONG).show();
-        Bundle extras = sbn.getNotification().extras;
-        String title = (String) extras.getCharSequence(Notification.EXTRA_TITLE);
-        String text_content = (String)extras.getCharSequence(Notification.EXTRA_TEXT);
 
-        Intent intent = new Intent("com.huhtamaki.marhuh.simplenotifications");
-        intent.putExtra("title", title);
-        intent.putExtra("text_content", text_content);
-        sendBroadcast(intent);
+        String packageName = sbn.getPackageName();
+        boolean appEnabled = checkApplication(packageName);
+
+        if(appEnabled){
+            Bundle extras = sbn.getNotification().extras;
+            String title = (String) extras.getCharSequence(Notification.EXTRA_TITLE);
+            String text_content = (String)extras.getCharSequence(Notification.EXTRA_TEXT);
+
+            Intent intent = new Intent("com.huhtamaki.marhuh.simplenotifications");
+            intent.putExtra("title", title);
+            intent.putExtra("text_content", text_content);
+            sendBroadcast(intent);
+        }
     }
 
     @Override
@@ -41,15 +45,16 @@ public class NotificationListener extends NotificationListenerService {
         // Implement what you want here
     }
 
-    private void checkApplication(StatusBarNotification sbn) {
+    private boolean checkApplication(String packageName) {
+
         prefs = getSharedPreferences("appStates",MODE_PRIVATE);
-        String packageName = sbn.getPackageName();
         boolean state = prefs.getBoolean(packageName,false);
 
-        if(state != false){
-            Context context = getApplicationContext();
-            TransferNotification transferer = new TransferNotification(context, sbn);
-            transferer.transfer();
+        if(state == false){
+            return false;
+        }
+        else{
+            return true;
         }
     }
 }

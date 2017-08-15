@@ -62,14 +62,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         setNavigationViewListener();
 
-        /*// Creation of broadcastreceiver
-        BroadcastReceiver myReceiver = new MyNotificationReceiver();
-        IntentFilter filter = new IntentFilter(Context.NOTIFICATION_SERVICE);
-        filter.addCategory(NOTIFICATION_SERVICE);*/
-
         notbuilder = new NotificationCompat.Builder(this);
         notbuilder.setAutoCancel(true);
 
+        // Check if notification permissions are enabled.
         if(!isNotificationServiceEnabled()){
             enableNotificationListenerAlertDialog = buildNotificationServiceAlertDialog();
             enableNotificationListenerAlertDialog.show();
@@ -180,7 +176,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         public void onReceive(Context context, Intent intent) {
             String title = intent.getStringExtra("title");
             String text_content = intent.getStringExtra("text_content");
-            //Toast.makeText(MainActivity.this, receivedNotificationCode, Toast.LENGTH_LONG).show();
+
+            TransferNotification transferer = new TransferNotification(MainActivity.this, title, text_content);
+            transferer.transfer();
+
             header.setText(title + "\n" + text_content);
         }
     }
