@@ -1,25 +1,44 @@
 package com.huhtamaki.marhuh.simplenotifications;
 
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
+import android.content.ComponentName;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.NotificationCompat;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
+import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Toast;
 
+import static android.provider.Settings.ACTION_NOTIFICATION_LISTENER_SETTINGS;
+
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
+
+    private NotificationReceiver notificationReceiver;
+    private static final String ENABLED_NOTIFICATION_LISTENERS = "enabled_notification_listeners";
+    private AlertDialog enableNotificationListenerAlertDialog;
 
     private DrawerLayout drawerLayout;
     private ActionBarDrawerToggle toggle;
 
     private Toolbar toolbar;
+
+    NotificationCompat.Builder notbuilder;
+    private static final int ID = 530;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,10 +58,24 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         setNavigationViewListener();
 
-        // Creation of broadcastreceiver
+        /*// Creation of broadcastreceiver
         BroadcastReceiver myReceiver = new MyNotificationReceiver();
         IntentFilter filter = new IntentFilter(Context.NOTIFICATION_SERVICE);
-        filter.addCategory(NOTIFICATION_SERVICE);
+        filter.addCategory(NOTIFICATION_SERVICE);*/
+
+        notbuilder = new NotificationCompat.Builder(this);
+        notbuilder.setAutoCancel(true);
+
+        if(!isNotificationServiceEnabled()){
+            enableNotificationListenerAlertDialog = buildNotificationServiceAlertDialog();
+            enableNotificationListenerAlertDialog.show();
+        }
+
+        // Finally we register a receiver to tell the MainActivity when a notification has been received
+        notificationReceiver = new NotificationReceiver();
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction("com.huhtamaki.marhuh.simplenotifications");
+        registerReceiver(notificationReceiver,intentFilter);
     }
 
     @Override
@@ -77,5 +110,67 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private void setNavigationViewListener(){
         NavigationView navigationView = (NavigationView) findViewById(R.id.myNavigationView);
         navigationView.setNavigationItemSelectedListener(this);
+    }
+
+    public void createNotification(View view){
+
+        notbuilder.setSmallIcon(R.mipmap.ic_launcher);
+        notbuilder.setTicker("This is the ticker");
+        notbuilder.setWhen(System.currentTimeMillis());
+        notbuilder.setContentTitle("This is the title");
+        notbuilder.setContentText("Notification body text");
+
+        Intent intent = new Intent(this, WifiActivity.class);
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        notbuilder.setContentIntent(pendingIntent);
+
+        NotificationManager nm = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+        nm.notify(ID,notbuilder.build());
+    }
+
+    public class NotificationReceiver extends BroadcastReceiver{
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            int notificationCode = intent.getIntExtra("Result",0);
+            Toast.makeText(MainActivity.this, notificationCode, Toast.LENGTH_LONG).show();
+        }
+    }
+
+    private boolean isNotificationServiceEnabled(){
+        String pkgName = getPackageName();
+        final String flat = Settings.Secure.getString(getContentResolver(),
+                ENABLED_NOTIFICATION_LISTENERS);
+        if (!TextUtils.isEmpty(flat)) {
+            final String[] names = flat.split(":");
+            for (int i = 0; i < names.length; i++) {
+                final ComponentName cn = ComponentName.unflattenFromString(names[i]);
+                if (cn != null) {
+                    if (TextUtils.equals(pkgName, cn.getPackageName())) {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
+    private AlertDialog buildNotificationServiceAlertDialog(){
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+        alertDialogBuilder.setTitle(R.string.notification_listener_service);
+        alertDialogBuilder.setMessage(R.string.notification_listener_service_explanation);
+        alertDialogBuilder.setPositiveButton(R.string.yes,
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        startActivity(new Intent(ACTION_NOTIFICATION_LISTENER_SETTINGS));
+                    }
+                });
+        alertDialogBuilder.setNegativeButton(R.string.no,
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        // If you choose to not enable the notification listener
+                        // the app. will not work as expected
+                    }
+                });
+        return(alertDialogBuilder.create());
     }
 }

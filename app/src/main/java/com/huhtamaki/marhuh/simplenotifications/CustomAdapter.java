@@ -44,6 +44,7 @@ class CustomAdapter extends ArrayAdapter<String>{
         WifiManager wifiMgr = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
         WifiInfo wifi_info = wifiMgr.getConnectionInfo();
         connected_wifi_name = wifi_info.getSSID();
+        connected_wifi_name = connected_wifi_name.replace("\"","");
 
     }
 

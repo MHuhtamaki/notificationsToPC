@@ -27,6 +27,13 @@
             android:textColor="@color/navigation_menu_item"
             android:textAlignment="center"
             android:textSize="24dp" />
+
+        <Button
+            android:id="@+id/notification_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Create notification"
+            android:onClick="createNotification"/>
     </LinearLayout>
 
     <android.support.design.widget.NavigationView
