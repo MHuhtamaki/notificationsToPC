@@ -39,7 +39,7 @@ public class CustomDialogBuilder {
                 public void onClick(DialogInterface dialogInterface, int which) {
                     // Get entered Ip address and check it for unwanted characters.
                     String ip = input.getText().toString();
-                    String[] bad_strings = {" ",",","-"};
+                    String[] bad_strings = {" ",",","-","\""};
                     for(String s : bad_strings){
                         if(ip.contains(s)){
                             ip = ip.replace(s,"");

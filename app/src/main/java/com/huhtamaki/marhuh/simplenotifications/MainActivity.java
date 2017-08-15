@@ -19,11 +19,9 @@ import android.os.Bundle;
 import android.support.v7.app.NotificationCompat;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import static android.provider.Settings.ACTION_NOTIFICATION_LISTENER_SETTINGS;
 
@@ -177,7 +175,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             String title = intent.getStringExtra("title");
             String text_content = intent.getStringExtra("text_content");
 
-            TransferNotification transferer = new TransferNotification(MainActivity.this, title, text_content);
+            NotificationTransferer transferer = new NotificationTransferer(MainActivity.this, title, text_content);
             transferer.transfer();
 
             header.setText(title + "\n" + text_content);
