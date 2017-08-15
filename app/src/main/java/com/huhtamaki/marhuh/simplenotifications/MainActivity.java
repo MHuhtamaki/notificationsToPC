@@ -176,7 +176,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             String text_content = intent.getStringExtra("text_content");
 
             NotificationTransferer transferer = new NotificationTransferer(MainActivity.this, title, text_content);
-            transferer.transfer();
+            transferer.isWifiEnabled();
 
             header.setText(title + "\n" + text_content);
         }

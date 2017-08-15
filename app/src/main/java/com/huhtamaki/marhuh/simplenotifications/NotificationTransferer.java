@@ -29,7 +29,7 @@ public class NotificationTransferer {
         this.context = context;
     }
 
-    public void transfer(){
+    public void isWifiEnabled(){
 
         prefs_ips = context.getSharedPreferences("networkInfo", Context.MODE_PRIVATE);
 
@@ -38,20 +38,26 @@ public class NotificationTransferer {
         connected_wifi_name = wifi_info.getSSID();
         connected_wifi_name = connected_wifi_name.replace("\"","");
 
-        // Check if current connected wifi is enabled in 'WifiActivity'.
+        // Check if current connected wifi is enabled by user in WifiActivity.
         prefs_wifis = context.getSharedPreferences("networkStates", Context.MODE_PRIVATE);
         boolean networkEnabled = prefs_wifis.getBoolean(connected_wifi_name,false);
+
         if(networkEnabled){
             String targetIP = prefs_ips.getString(connected_wifi_name,"");
 
             if(targetIP.equals("")){
-                Toast.makeText(context, "No IP stored for current wifi!", Toast.LENGTH_LONG).show();
+                Toast.makeText(context, "SimpleNotifications: No IP stored for current wifi!", Toast.LENGTH_LONG).show();
             }
             else{
                 Toast.makeText(context, targetIP, Toast.LENGTH_LONG).show();
+
+                // Everything ok, start the actual data transfer.
+                transfer();
             }
         }
+    }
 
-
+    public void transfer(){
+        // TODO: Start pushing data forwards.
     }
 }
