@@ -22,6 +22,7 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import static android.provider.Settings.ACTION_NOTIFICATION_LISTENER_SETTINGS;
@@ -31,6 +32,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private NotificationReceiver notificationReceiver;
     private static final String ENABLED_NOTIFICATION_LISTENERS = "enabled_notification_listeners";
     private AlertDialog enableNotificationListenerAlertDialog;
+    private TextView header;
 
     private DrawerLayout drawerLayout;
     private ActionBarDrawerToggle toggle;
@@ -38,12 +40,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private Toolbar toolbar;
 
     NotificationCompat.Builder notbuilder;
-    private static final int ID = 530;
+    private static final int ID = 5301233;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        header = (TextView) findViewById(R.id.tw_header);
 
         toolbar = (Toolbar) findViewById(R.id.nav_action);
         setSupportActionBar(toolbar);
@@ -76,6 +80,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction("com.huhtamaki.marhuh.simplenotifications");
         registerReceiver(notificationReceiver,intentFilter);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        unregisterReceiver(notificationReceiver);
     }
 
     @Override
@@ -127,16 +137,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         NotificationManager nm = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
         nm.notify(ID,notbuilder.build());
     }
-
-    public class NotificationReceiver extends BroadcastReceiver{
-
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            int notificationCode = intent.getIntExtra("Result",0);
-            Toast.makeText(MainActivity.this, notificationCode, Toast.LENGTH_LONG).show();
-        }
-    }
-
     private boolean isNotificationServiceEnabled(){
         String pkgName = getPackageName();
         final String flat = Settings.Secure.getString(getContentResolver(),
@@ -172,5 +172,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     }
                 });
         return(alertDialogBuilder.create());
+    }
+
+    public class NotificationReceiver extends BroadcastReceiver{
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String title = intent.getStringExtra("title");
+            String text_content = intent.getStringExtra("text_content");
+            //Toast.makeText(MainActivity.this, receivedNotificationCode, Toast.LENGTH_LONG).show();
+            header.setText(title + "\n" + text_content);
+        }
     }
 }

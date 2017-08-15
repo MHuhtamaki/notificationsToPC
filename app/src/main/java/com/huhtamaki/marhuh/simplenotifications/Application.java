@@ -9,6 +9,16 @@ import android.graphics.drawable.Drawable;
 public class Application {
 
     private String name = "";
+    private String packageName;
+
+    public String getPackageName() {
+        return packageName;
+    }
+
+    public void setPackageName(String packageName) {
+        this.packageName = packageName;
+    }
+
     private Drawable icon;
 
     public String getName() {

@@ -29,14 +29,15 @@ public class AppsActivity extends AppCompatActivity {
         PackageManager pkManager = getPackageManager();
         for(ResolveInfo info : pkgAppsList){
             Application app = new Application();
-            app.setName(info.activityInfo.applicationInfo.loadLabel(pkManager).toString());
+            app.setName((String) info.activityInfo.loadLabel(pkManager));
+            app.setPackageName(info.activityInfo.packageName);
             app.setIcon(info.activityInfo.applicationInfo.loadIcon(pkManager));
             allapps.add(app);
         }
 
-        for(Application ap : allapps){
+        /*for(Application ap : allapps){
             allapps_string.add(ap.getName());
-        }
+        }*/
 
         ListAdapter myAdapter = new CustomAppAdapter(this,allapps);
         ListView listView = (ListView) findViewById(R.id.apps_listview);
