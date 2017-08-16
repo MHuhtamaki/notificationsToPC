@@ -55,7 +55,7 @@ class CustomAdapter extends ArrayAdapter<String>{
         View customView = inflater.inflate(R.layout.custom_row, parent, false);
 
         final String networkSSID = getItem(position);
-
+        listImage = customView.findViewById(R.id.iw_wifi);
         final TextView rowText = customView.findViewById(R.id.row_text);
         rowText.setText(networkSSID);
         rowText.setOnClickListener(new View.OnClickListener() {
@@ -74,8 +74,11 @@ class CustomAdapter extends ArrayAdapter<String>{
             }
         });
 
-        listImage = customView.findViewById(R.id.iw_wifi);
-        listImage.setOnClickListener(new View.OnClickListener() {
+        // Commented out possibility to click wifi icon and connect to that wifi.
+        // maybe enabled later on...
+
+
+        /*listImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 // Get the name of a clicked wifi network.
@@ -84,13 +87,11 @@ class CustomAdapter extends ArrayAdapter<String>{
                 // Creation of a DialogBuilder for connecting to a wifi network.
                 CustomDialogBuilder myDialogBuilder = new CustomDialogBuilder(context, current_target_SSID);
                 builder = myDialogBuilder.createDialogBuilder("Connect to a wifi-network");
-                //TODO: Vie dialogbuilderille jollain tieto minkä rivin ikonia painettiin,
-                // TODO: kuvakkeen vaihtoa varten.
 
                 ad_wifi = builder.create();
                 ad_wifi.show();
             }
-        });
+        });*/
 
 
         Switch mySwitch = customView.findViewById(R.id.wifi_switch);

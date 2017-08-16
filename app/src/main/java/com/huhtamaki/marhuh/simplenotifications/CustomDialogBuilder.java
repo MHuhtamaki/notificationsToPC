@@ -60,7 +60,9 @@ public class CustomDialogBuilder {
             });
         }
         else{
-            builder.setTitle(title);
+            // DISABLED AT THE MOMENT
+
+           /* builder.setTitle(title);
             builder.setMessage("Do you wish to connect to this network?");
             builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                 @Override
@@ -73,7 +75,7 @@ public class CustomDialogBuilder {
 
                     // If connection established successfully, recall activity 'WifiActivity'
                     if(result){
-                        // TODO: FIX THIS, WONT DELETE PREVIOUS ACTIVITY
+                        // This needs to fixed so that previous activity will be killed first.
                         Intent intent = new Intent(context, WifiActivity.class);
                         context.startActivity(intent);
                     }
@@ -87,7 +89,7 @@ public class CustomDialogBuilder {
                 public void onClick(DialogInterface dialogInterface, int i) {
                     dialogInterface.dismiss();
                 }
-            });
+            });*/
         }
         return builder;
     }
