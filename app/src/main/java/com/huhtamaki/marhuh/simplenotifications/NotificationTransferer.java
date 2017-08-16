@@ -9,6 +9,10 @@ import android.os.Bundle;
 import android.service.notification.StatusBarNotification;
 import android.widget.Toast;
 
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.net.Socket;
+
 /**
  * Created by marhuh on 15.8.2017.
  */
@@ -49,15 +53,17 @@ public class NotificationTransferer {
                 Toast.makeText(context, "SimpleNotifications: No IP stored for current wifi!", Toast.LENGTH_LONG).show();
             }
             else{
-                Toast.makeText(context, targetIP, Toast.LENGTH_LONG).show();
+                //Toast.makeText(context, targetIP, Toast.LENGTH_LONG).show();
 
+                // Create parameters for the Asynctask 'SendNotificationTask'.
+                NotificationParams params = new NotificationParams(title, text_content, targetIP);
                 // Everything ok, start the actual data transfer.
-                transfer();
+                transfer(params);
             }
         }
     }
 
-    public void transfer(){
-        // TODO: Start pushing data forwards.
+    public void transfer(NotificationParams params){
+        new SendNotificationTask().execute(params);
     }
 }
