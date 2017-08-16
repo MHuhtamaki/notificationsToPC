@@ -2,6 +2,7 @@ package com.huhtamaki.marhuh.simplenotifications;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.v7.app.AlertDialog;
 import android.text.InputType;
@@ -64,13 +65,21 @@ public class CustomDialogBuilder {
             builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialogInterface, int i) {
-                    Toast.makeText(context, "Clicked Yes", Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(context, current_target_SSID, Toast.LENGTH_SHORT).show();
 
-                    /*// Connect to the wifi-network.
+                    // Connect to the wifi-network.
                     ConnectToWifi connector = new ConnectToWifi(context, current_target_SSID);
-                    connector.connect();*/
+                    boolean result  = connector.connect();
 
-                    //listImage.setImageResource(R.drawable.wifi_icon_new);
+                    // If connection established successfully, recall activity 'WifiActivity'
+                    if(result){
+                        // TODO: FIX THIS, WONT DELETE PREVIOUS ACTIVITY
+                        Intent intent = new Intent(context, WifiActivity.class);
+                        context.startActivity(intent);
+                    }
+                    else{
+                        Toast.makeText(context, "Attempt to connect failed", Toast.LENGTH_SHORT).show();
+                    }
                 }
             });
             builder.setNegativeButton("Nope", new DialogInterface.OnClickListener() {
