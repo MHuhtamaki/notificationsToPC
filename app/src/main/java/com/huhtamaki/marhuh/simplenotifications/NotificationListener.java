@@ -1,14 +1,12 @@
 package com.huhtamaki.marhuh.simplenotifications;
 
 import android.app.Notification;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.service.notification.NotificationListenerService;
 import android.service.notification.StatusBarNotification;
-import android.widget.Toast;
 
 /**
  * Created by marhuh on 15.8.2017.

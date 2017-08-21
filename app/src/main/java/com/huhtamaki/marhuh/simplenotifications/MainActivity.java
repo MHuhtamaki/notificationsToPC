@@ -52,12 +52,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         drawerLayout = (DrawerLayout) findViewById(R.id.drawerLayout);
         toggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.open, R.string.close);
-
         drawerLayout.addDrawerListener(toggle);
         toggle.syncState();
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
         setNavigationViewListener();
 
         notbuilder = new NotificationCompat.Builder(this);

@@ -31,7 +31,7 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.List;
 
-public class WifiActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
+public class WifiActivity extends AppCompatActivity {
 
     private WifiManager manager;
     private ArrayList<String> SSIDs;
@@ -39,26 +39,10 @@ public class WifiActivity extends AppCompatActivity implements NavigationView.On
     private AlertDialog ad;
     private String current_target_SSID;
 
-    private DrawerLayout drawerLayout;
-    private ActionBarDrawerToggle toggle;
-    private Toolbar toolbar;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_wifi);
-
-        toolbar = (Toolbar) findViewById(R.id.nav_action);
-        drawerLayout = (DrawerLayout) findViewById(R.id.drawerLayout);
-
-        // Set actionbar.
-        setSupportActionBar(toolbar);
-
-        toggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.open, R.string.close);
-        drawerLayout.addDrawerListener(toggle);
-        toggle.syncState();
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        setNavigationViewListener();
 
         populateNetworksToListview();
 
@@ -85,31 +69,5 @@ public class WifiActivity extends AppCompatActivity implements NavigationView.On
         else{
             Toast.makeText(this, "Failed to find configured networks, try again", Toast.LENGTH_SHORT).show();
         }
-    }
-
-    private void setNavigationViewListener(){
-        NavigationView navigationView = (NavigationView) findViewById(R.id.myNavigationView);
-        navigationView.setNavigationItemSelectedListener(this);
-    }
-
-    @Override
-    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-        switch (item.getItemId()){
-            case R.id.networks:
-                Intent intent = new Intent(this, WifiActivity.class);
-                startActivity(intent);
-                break;
-            case R.id.home:
-                Intent home = new Intent(this, MainActivity.class);
-                startActivity(home);
-                break;
-            case R.id.apps:
-                Intent apps = new Intent(this, AppsActivity.class);
-                startActivity(apps);
-                break;
-            case R.id.settings:
-                // TODO: Implement settings activity.
-        }
-        return true;
     }
 }

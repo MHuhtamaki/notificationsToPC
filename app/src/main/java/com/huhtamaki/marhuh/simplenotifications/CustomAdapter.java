@@ -76,8 +76,6 @@ class CustomAdapter extends ArrayAdapter<String>{
 
         // Commented out possibility to click wifi icon and connect to that wifi.
         // maybe enabled later on...
-
-
         /*listImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
