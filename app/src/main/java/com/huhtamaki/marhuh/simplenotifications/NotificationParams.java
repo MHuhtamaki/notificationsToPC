@@ -9,10 +9,12 @@ public class NotificationParams {
     String title;
     String text_content;
     String IP;
+    String port;
 
-    public NotificationParams(String title, String text_content, String IP){
+    public NotificationParams(String title, String text_content, String IP, String port){
         this.title = title;
         this.text_content = text_content;
         this.IP = IP;
+        this.port = port;
     }
 }

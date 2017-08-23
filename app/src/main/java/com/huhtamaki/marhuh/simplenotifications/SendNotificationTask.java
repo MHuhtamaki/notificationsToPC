@@ -18,8 +18,9 @@ public class SendNotificationTask extends AsyncTask<NotificationParams, Void, Vo
         String title = notificationParamses[0].title;
         String text_content = notificationParamses[0].text_content;
         String targetIP = notificationParamses[0].IP;
+        String targetPort = notificationParamses[0].port;
         try{
-            Socket socket = new Socket(targetIP,53053);
+            Socket socket = new Socket(targetIP,Integer.parseInt(targetPort));
             DataOutputStream dos = new DataOutputStream(socket.getOutputStream());
             dos.writeUTF(title + "\n" + text_content);
             socket.close();

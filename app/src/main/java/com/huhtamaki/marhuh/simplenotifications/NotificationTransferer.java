@@ -19,6 +19,11 @@ import java.net.Socket;
 
 public class NotificationTransferer {
 
+    private String[] ipAndPort;
+    private String ipWithPort;
+    private String targetIP;
+    private String targetPort;
+
     private String title;
     private String text_content;
     private String connected_wifi_name;
@@ -50,16 +55,22 @@ public class NotificationTransferer {
         boolean networkEnabled = prefs_wifis.getBoolean(connected_wifi_name,false);
 
         if(networkEnabled){
-            String targetIP = prefs_ips.getString(connected_wifi_name,"");
+            ipWithPort = prefs_ips.getString(connected_wifi_name,"");
 
-            if(targetIP.equals("")){
+            if(ipWithPort.equals("")){
                 Toast.makeText(context, "SimpleNotifications: No IP stored for current wifi!", Toast.LENGTH_LONG).show();
             }
             else{
+                ipAndPort = ipWithPort.split("-");
+                targetIP = ipAndPort[0];
+                targetPort = ipAndPort[1];
+                //Toast.makeText(context, targetIP + "\n" + targetPort, Toast.LENGTH_SHORT).show();
+
+
                 //Toast.makeText(context, targetIP, Toast.LENGTH_LONG).show();
 
                 // Create parameters for the Asynctask 'SendNotificationTask'.
-                NotificationParams params = new NotificationParams(title, text_content, targetIP);
+                NotificationParams params = new NotificationParams(title, text_content, targetIP, targetPort);
                 // Everything ok, start the actual data transfer.
                 transfer(params);
             }

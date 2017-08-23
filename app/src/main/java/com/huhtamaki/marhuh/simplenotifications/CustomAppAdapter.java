@@ -14,6 +14,7 @@ import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -25,11 +26,14 @@ public class CustomAppAdapter extends ArrayAdapter<Application> {
 
     SharedPreferences prefs;
     SharedPreferences.Editor editor;
+    Context context;
 
     public CustomAppAdapter(@NonNull Context context, ArrayList<Application> appList) {
         super(context,R.layout.app_custom_row ,appList);
         prefs = context.getSharedPreferences("appStates",context.MODE_PRIVATE);
         editor = prefs.edit();
+        this.context = context;
+
     }
 
     @NonNull
@@ -58,6 +62,7 @@ public class CustomAppAdapter extends ArrayAdapter<Application> {
             public void onCheckedChanged(CompoundButton compoundButton, boolean state) {
                 editor.putBoolean(app_packageName,state);
                 editor.apply();
+                //Toast.makeText(context, app_packageName + "\n" + state, Toast.LENGTH_SHORT).show();
             }
         });
 
