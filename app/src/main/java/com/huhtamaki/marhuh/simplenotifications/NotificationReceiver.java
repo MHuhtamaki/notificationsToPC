@@ -13,12 +13,12 @@ public class NotificationReceiver extends BroadcastReceiver{
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        Toast.makeText(context, "Notification received", Toast.LENGTH_LONG).show();
+        //Toast.makeText(context, "Notification received", Toast.LENGTH_LONG).show();
         String title = intent.getStringExtra("title");
         String text_content = intent.getStringExtra("text_content");
 
-        NotificationTransferer transferer = new NotificationTransferer(context, title, text_content);
-        transferer.isWifiEnabled();
+        /*NotificationTransferer transferer = new NotificationTransferer(context, title, text_content);
+        transferer.isWifiEnabled();*/
 
         //header.setText(title + "\n" + text_content);
     }

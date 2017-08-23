@@ -33,22 +33,34 @@ public class CustomDialogBuilder {
             final EditText input = new EditText(context);
             input.setRawInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
             builder.setTitle(title);
-            builder.setMessage("Please, specify an IP address where to send notifications.");
+            builder.setMessage("Specify an IP and port number where to send notifications. " + "\n" +
+                    "e.g. 10.0.0.1-1234");
             builder.setView(input);
             builder.setPositiveButton("Save", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialogInterface, int which) {
+
                     // Get entered Ip address and check it for unwanted characters.
                     String ip = input.getText().toString();
-                    String[] bad_strings = {" ",",","-","\""};
+                    String[] bad_strings = {" ",","};
                     for(String s : bad_strings){
                         if(ip.contains(s)){
                             ip = ip.replace(s,"");
                         }
                     }
-                    //Toast.makeText(context, current_target_SSID +  ":" + ip, Toast.LENGTH_SHORT).show();
-                    // Store given IP address for sending notifications.
-                    storeTargetIP(ip);
+                    // Check the ip address for validity.
+                    ValidateIP validator = new ValidateIP();
+                    boolean isValidIP = validator.isValidIp(ip);
+                    Toast.makeText(context,String.valueOf(isValidIP),Toast.LENGTH_SHORT).show();
+
+                    if(isValidIP){
+                        //Toast.makeText(context, current_target_SSID +  ":" + ip, Toast.LENGTH_SHORT).show();
+                        // Store given IP address for sending notifications.
+                        storeTargetIP(ip);
+                    }
+                    else{
+                        Toast.makeText(context, "Specified IP address not valid!", Toast.LENGTH_SHORT).show();
+                    }
                 }
             });
 
