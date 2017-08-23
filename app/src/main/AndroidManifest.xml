@@ -32,7 +32,11 @@
                 <action android:name="android.service.notification.NotificationListenerService" />
             </intent-filter>
         </service>
-
+        <receiver android:name=".NotificationReceiver" android:exported="true">
+            <intent-filter>
+                <action android:name="com.huhtamaki.marhuh.simplenotifications"/>
+            </intent-filter>
+        </receiver>
         <activity android:name=".SettingsActivity"></activity>
     </application>
 

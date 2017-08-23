@@ -27,6 +27,9 @@ public class NotificationTransferer {
     private SharedPreferences prefs_ips;
     private SharedPreferences prefs_wifis;
 
+    private WifiManager wifiMgr;
+    private WifiInfo wifi_info;
+
     public NotificationTransferer(Context context, String title, String text_content){
         this.title = title;
         this.text_content = text_content;
@@ -37,8 +40,8 @@ public class NotificationTransferer {
 
         prefs_ips = context.getSharedPreferences("networkInfo", Context.MODE_PRIVATE);
 
-        WifiManager wifiMgr = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
-        WifiInfo wifi_info = wifiMgr.getConnectionInfo();
+        wifiMgr = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
+        wifi_info = wifiMgr.getConnectionInfo();
         connected_wifi_name = wifi_info.getSSID();
         connected_wifi_name = connected_wifi_name.replace("\"","");
 

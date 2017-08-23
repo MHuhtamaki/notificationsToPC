@@ -22,12 +22,13 @@ import android.text.TextUtils;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import static android.provider.Settings.ACTION_NOTIFICATION_LISTENER_SETTINGS;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
 
-    private NotificationReceiver notificationReceiver;
+    //private NotificationReceiver notificationReceiver;
     private static final String ENABLED_NOTIFICATION_LISTENERS = "enabled_notification_listeners";
     private AlertDialog enableNotificationListenerAlertDialog;
     private TextView header;
@@ -68,16 +69,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
 
         // Finally we register a receiver to tell the MainActivity when a notification has been received
-        notificationReceiver = new NotificationReceiver();
+        /*notificationReceiver = new NotificationReceiver();
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction("com.huhtamaki.marhuh.simplenotifications");
-        registerReceiver(notificationReceiver,intentFilter);
+        registerReceiver(notificationReceiver,intentFilter);*/
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        unregisterReceiver(notificationReceiver);
+        //unregisterReceiver(notificationReceiver);
     }
 
     @Override
@@ -159,17 +160,18 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         alertDialogBuilder.setNegativeButton(R.string.no,
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        // If you choose to not enable the notification listener
-                        // the app. will not work as expected
+                        Toast.makeText(MainActivity.this, "If you choose not to enable the notification listener" +
+                                "the app will not work as expected!", Toast.LENGTH_LONG).show();
                     }
                 });
         return(alertDialogBuilder.create());
     }
 
-    public class NotificationReceiver extends BroadcastReceiver{
+    /*class NotificationReceiver extends BroadcastReceiver{
 
         @Override
         public void onReceive(Context context, Intent intent) {
+            Toast.makeText(context, "Notification received", Toast.LENGTH_LONG).show();
             String title = intent.getStringExtra("title");
             String text_content = intent.getStringExtra("text_content");
 
@@ -178,5 +180,5 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
             header.setText(title + "\n" + text_content);
         }
-    }
+    }*/
 }
