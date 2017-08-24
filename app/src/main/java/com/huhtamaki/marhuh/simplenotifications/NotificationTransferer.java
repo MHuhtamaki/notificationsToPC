@@ -64,7 +64,6 @@ public class NotificationTransferer {
                 ipAndPort = ipWithPort.split("-");
                 targetIP = ipAndPort[0];
                 targetPort = ipAndPort[1];
-                //Toast.makeText(context, targetIP + "\n" + targetPort, Toast.LENGTH_SHORT).show();
 
 
                 //Toast.makeText(context, targetIP, Toast.LENGTH_LONG).show();

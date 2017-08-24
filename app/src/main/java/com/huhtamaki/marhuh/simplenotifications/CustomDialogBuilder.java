@@ -18,6 +18,7 @@ public class CustomDialogBuilder {
     private AlertDialog.Builder builder;
     private Context context;
     private String current_target_SSID;
+    private SharedPreferences prefs;
 
     public CustomDialogBuilder(Context context, String current_target_SSID){
         this.context = context;
@@ -31,6 +32,13 @@ public class CustomDialogBuilder {
 
         if(title.equals("IP Address")){
             final EditText input = new EditText(context);
+
+            // Get stored ip+port and show it on the EditText 'input'.
+            prefs = context.getSharedPreferences("networkInfo", Context.MODE_PRIVATE);
+            String ipAndPort = prefs.getString(current_target_SSID,"");
+            input.setText(ipAndPort.toString());
+
+
             input.setRawInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
             builder.setTitle(title);
             builder.setMessage("Specify an IP and port number where to send notifications. " + "\n" +
@@ -54,7 +62,6 @@ public class CustomDialogBuilder {
                     Toast.makeText(context,String.valueOf(isValidIP),Toast.LENGTH_SHORT).show();
 
                     if(isValidIP){
-                        //Toast.makeText(context, current_target_SSID +  ":" + ip, Toast.LENGTH_SHORT).show();
                         // Store given IP address for sending notifications.
                         storeTargetIP(ip);
                     }
@@ -108,8 +115,8 @@ public class CustomDialogBuilder {
 
     private void storeTargetIP(String ip) {
 
-        SharedPreferences pref = context.getSharedPreferences("networkInfo", Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = pref.edit();
+        prefs = context.getSharedPreferences("networkInfo", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = prefs.edit();
         editor.putString(current_target_SSID,ip);
         editor.apply();
 

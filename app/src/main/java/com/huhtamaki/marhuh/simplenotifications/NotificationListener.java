@@ -3,6 +3,7 @@ package com.huhtamaki.marhuh.simplenotifications;
 import android.app.Notification;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.service.notification.NotificationListenerService;
@@ -41,7 +42,7 @@ public class NotificationListener extends NotificationListenerService {
 
     @Override
     public void onNotificationRemoved(StatusBarNotification sbn){
-        // Implement what you want here
+        // No function right now...
     }
 
     private boolean checkApplication(String packageName) {

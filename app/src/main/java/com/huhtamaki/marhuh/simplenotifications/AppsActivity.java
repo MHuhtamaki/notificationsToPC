@@ -35,10 +35,6 @@ public class AppsActivity extends AppCompatActivity {
             allapps.add(app);
         }
 
-        /*for(Application ap : allapps){
-            allapps_string.add(ap.getName());
-        }*/
-
         ListAdapter myAdapter = new CustomAppAdapter(this,allapps);
         ListView listView = (ListView) findViewById(R.id.apps_listview);
         listView.setAdapter(myAdapter);

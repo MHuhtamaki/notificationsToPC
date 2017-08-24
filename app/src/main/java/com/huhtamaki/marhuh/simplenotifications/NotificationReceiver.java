@@ -19,7 +19,5 @@ public class NotificationReceiver extends BroadcastReceiver{
 
         NotificationTransferer transferer = new NotificationTransferer(context, title, text_content);
         transferer.isWifiEnabled();
-
-        //header.setText(title + "\n" + text_content);
     }
 }

@@ -106,6 +106,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 Intent apps = new Intent(this, AppsActivity.class);
                 startActivity(apps);
                 break;
+            case R.id.settings:
+                Intent settings = new Intent(this, SettingsActivity.class);
+                startActivity(settings);
+                break;
         }
         return true;
     }
